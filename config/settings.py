@@ -77,8 +77,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jewelry_shop_db',
-        'USER': 'your_user',
-        'PASSWORD': 'your_password',
+        'USER': 'weirdlyggg',
+        'PASSWORD': '1234',
         'HOST': 'db',  # Имя сервиса db в docker-compose.yml
         'PORT': '5432',
     }
