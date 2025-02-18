@@ -14,6 +14,18 @@ class OrderItemInLine(admin.TabularInline):
     model = OrderItem
     extra = 1
 
+class ProductMaterialInLine(admin.TabularInline):
+    model = ProductMaterial
+    extra = 1
+
+class ProductGemstoneInLine(admin.TabularInline):
+    model = ProductGemstone
+    extra = 1
+
+class ProductImageInLine(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
@@ -34,7 +46,7 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(ReviewImage)
 class ReviewImageAdmin(admin.ModelAdmin):
     list_display = ('review', 'image_url')
-    search_fields = ('review__product__name')
+    search_fields = ('review__product__name',)
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
