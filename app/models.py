@@ -50,15 +50,35 @@ class User(models.Model):
         return self.email
 
 
+# class Order(models.Model):
+#     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
+#     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+#     status = models.CharField(max_length=50)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Order #{self.id} by {self.user.first_name}"
+
 class Order(models.Model):
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def calculate_total_price(self):
+        return sum(item.price_at_time_of_purchase * item.quantity for item in self.items.all())
 
     def __str__(self):
         return f"Order #{self.id} by {self.user.first_name}"
 
+
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField()
+#     price_at_time_of_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+
+#     def __str__(self):
+#         return f"{self.product.name} x{self.quantity}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
@@ -66,18 +86,33 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
     price_at_time_of_purchase = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def save(self, *args, **kwargs):
+        if not self.price_at_time_of_purchase:
+            self.price_at_time_of_purchase = self.product.price
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.product.name} x{self.quantity}"
 
+
+# class CartItem(models.Model):
+#     user = models.ForeignKey(User, related_name='cart_items', on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, related_name='cart_items', on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField()
+
+#     def __str__(self):
+#         return f"{self.product.name} x{self.quantity}"
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, related_name='cart_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='cart_items', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('user', 'product')
 
     def __str__(self):
         return f"{self.product.name} x{self.quantity}"
-
 
 class Favorite(models.Model):
     user = models.ForeignKey(User, related_name='favorites', on_delete=models.CASCADE)

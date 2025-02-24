@@ -53,20 +53,42 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('email', 'first_name', 'last_name', 'phone_number', 'date_joined')
     search_fields = ('email', 'first_name', 'last_name')
 
+# @admin.register(Order)
+# class OrderAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'total_price', 'status', 'created_at')
+#     list_filter = ('user',)
+#     search_fields = ('user__email',)
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'total_price', 'status', 'created_at')
-    list_filter = ('user',)
+    list_display = ('user', 'get_total_price', 'status', 'created_at')
+    list_filter = ('user', 'status')
     search_fields = ('user__email',)
+
+    @admin.display(description='Total Price')
+    def get_total_price(self, obj):
+        return obj.calculate_total_price()
+
+# @admin.register(OrderItem)
+# class OrderItemAdmin(admin.ModelAdmin):
+#     list_display = ('order', 'product', 'quantity', 'price_at_time_of_purchase')
+#     search_fields = ('order__id', 'product__name')
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order', 'product', 'quantity', 'price_at_time_of_purchase')
+    list_filter = ('order', 'product')
     search_fields = ('order__id', 'product__name')
+
+# @admin.register(CartItem)
+# class CartItemAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'product', 'quantity')
+#     search_fields = ('user__email', 'product__name')
 
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', 'quantity')
+    list_filter = ('user', 'product')
     search_fields = ('user__email', 'product__name')
 
 @admin.register(Favorite)
