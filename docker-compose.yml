@@ -6,6 +6,8 @@ services:
       POSTGRES_USER: weirdlyggg
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: jewelry_shop_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - my_network
 
@@ -24,3 +26,6 @@ services:
 networks:
   my_network:
     driver: bridge
+
+volumes:
+  postgres_data:
