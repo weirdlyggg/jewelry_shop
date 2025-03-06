@@ -116,5 +116,5 @@ class GemstoneAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('product', 'image_url')  
+    list_display = ('product', 'image', 'alt_text')  
     search_fields = ('product__name',)

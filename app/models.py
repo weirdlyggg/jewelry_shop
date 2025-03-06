@@ -50,14 +50,7 @@ class User(models.Model):
         return self.email
 
 
-# class Order(models.Model):
-#     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
-#     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-#     status = models.CharField(max_length=50)
-#     created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return f"Order #{self.id} by {self.user.first_name}"
 
 class Order(models.Model):
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
@@ -71,14 +64,7 @@ class Order(models.Model):
         return f"Order #{self.id} by {self.user.first_name}"
 
 
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-#     price_at_time_of_purchase = models.DecimalField(max_digits=10, decimal_places=2)
 
-#     def __str__(self):
-#         return f"{self.product.name} x{self.quantity}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
@@ -95,13 +81,7 @@ class OrderItem(models.Model):
         return f"{self.product.name} x{self.quantity}"
 
 
-# class CartItem(models.Model):
-#     user = models.ForeignKey(User, related_name='cart_items', on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, related_name='cart_items', on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
 
-#     def __str__(self):
-#         return f"{self.product.name} x{self.quantity}"
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, related_name='cart_items', on_delete=models.CASCADE)
@@ -152,9 +132,11 @@ class Gemstone(models.Model):
         return self.name
 
 
+    
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image_url = models.URLField()
+    image = models.ImageField(upload_to='products/')  # Поле для загрузки изображений
+    alt_text = models.CharField(max_length=255, blank=True, null=True)  # Опциональное описание
 
     def __str__(self):
         return f"Image for {self.product.name}"

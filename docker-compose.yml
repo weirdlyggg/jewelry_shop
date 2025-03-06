@@ -6,6 +6,8 @@ services:
       POSTGRES_USER: weirdlyggg
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: jewelry_shop_db
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
